@@ -1,0 +1,419 @@
+﻿<krpano version="1.19" title="虚拟现实">
+
+	<include url="skin/vtourskin.xml" />
+
+
+	<!-- customize skin settings: maps, gyro, webvr, thumbnails, tooltips, layout, design, ... -->
+	<skin_settings maps="false"
+				   maps_type="google"
+				   maps_bing_api_key=""
+				   maps_google_api_key=""
+				   maps_zoombuttons="false"
+				   gyro="true"
+				   webvr="true"
+				   webvr_gyro_keeplookingdirection="false"
+				   webvr_prev_next_hotspots="true"
+				   littleplanetintro="true"
+				   title="true"
+				   thumbs="true"
+				   thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+				   thumbs_opened="false"
+				   thumbs_text="true"
+				   thumbs_dragging="true"
+				   thumbs_onhoverscrolling="false"
+				   thumbs_scrollbuttons="false"
+				   thumbs_scrollindicator="false"
+				   thumbs_loop="false"
+				   tooltips_buttons="false"
+				   tooltips_thumbs="false"
+				   tooltips_hotspots="false"
+				   tooltips_mapspots="false"
+				   deeplinking="false"
+				   loadscene_flags="MERGE"
+				   loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
+				   loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
+				   loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
+				   loadingtext="加载中，请稍后..."
+				   layout_width="100%"
+				   layout_maxwidth="814"
+				   controlbar_width="-24"
+				   controlbar_height="40"
+				   controlbar_offset="20"
+				   controlbar_offset_closed="-40"
+				   controlbar_overlap.no-fractionalscaling="10"
+				   controlbar_overlap.fractionalscaling="0"
+				   design_skin_images="vtourskin.png"
+				   design_bgcolor="0x2D3E50"
+				   design_bgalpha="0.1"
+				   design_bgborder="0"
+				   design_bgroundedge="1"
+				   design_bgshadow="0 4 10 0x000000 0.3"
+				   design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+				   design_thumbborder_padding="2"
+				   design_thumbborder_bgroundedge="0"
+				   design_text_css="color:#FFFFFF; font-family:Arial;"
+				   design_text_shadow="1"
+	/>
+
+	<!--
+	    For an alternative skin design either change the <skin_settings> values 
+	    from above or optionally include one of the predefined designs from below.
+	-->
+	<!-- <include url="skin/vtourskin_design_flat_light.xml"  /> -->
+	<!-- <include url="skin/vtourskin_design_glass.xml"       /> -->
+	<!-- <include url="skin/vtourskin_design_ultra_light.xml" /> -->
+	<!-- <include url="skin/vtourskin_design_117.xml"         /> -->
+	<!-- <include url="skin/vtourskin_design_117round.xml"    /> -->
+	<!-- <include url="skin/vtourskin_design_black.xml"       /> -->
+
+	<!-- startup action - load the first scene -->
+	<action name="startup" autorun="onstart">
+		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
+		loadscene(get(startscene), null, MERGE);
+		if(startactions !== null, startactions() );
+        set(control.mouse, drag);
+        set(control.touch, drag);
+        set(layer[skin_title_pr].html,get(title));
+	</action>
+
+    <action name="add_all_the_time_tooltip">
+        txtadd(tooltipname, 'tooltip_', get(name));
+        addplugin(get(tooltipname));
+        txtadd(plugin[get(tooltipname)].parent, 'hotspot[', get(name), ']');
+        set(plugin[get(tooltipname)].url,'%SWFPATH%/plugins/textfield.swf');
+        set(plugin[get(tooltipname)].align,top);
+        set(plugin[get(tooltipname)].edge,bottom);
+        set(plugin[get(tooltipname)].x,0);
+        set(plugin[get(tooltipname)].y,0);
+        set(plugin[get(tooltipname)].autowidth,true);
+        set(plugin[get(tooltipname)].autoheight,true);
+        set(plugin[get(tooltipname)].vcenter,true);
+        set(plugin[get(tooltipname)].background,true);
+        set(plugin[get(tooltipname)].backgroundcolor,0x000000);
+        set(plugin[get(tooltipname)].roundedge,5);
+        set(plugin[get(tooltipname)].backgroundalpha,0.65);
+        set(plugin[get(tooltipname)].padding,5);
+        set(plugin[get(tooltipname)].border,false);
+        set(plugin[get(tooltipname)].glow,0);
+        set(plugin[get(tooltipname)].glowcolor,0xFFFFFF);
+        set(plugin[get(tooltipname)].css,'text-align:center; color:#FFFFFF; font-family:MicrosoftYahei;  font-size:24px;');
+        if(device.mobile,set(plugin[get(tooltipname)].css,'text-align:center; color:#FFFFFF; font-family:MicrosoftYahei; font-weight:bold; font-size:24px;');
+        );
+        set(plugin[get(tooltipname)].textshadow,0);
+        set(plugin[get(tooltipname)].textshadowrange,6.0);
+        set(plugin[get(tooltipname)].textshadowangle,90);
+        if(text == '' OR text === null,
+        copy(plugin[get(tooltipname)].html,scene[get(linkedscene)].title),
+        copy(plugin[get(tooltipname)].html,text)
+        );
+        set(plugin[get(tooltipname)].enabled,false);
+    </action>
+	
+	<scene name="scene_210" title="210" onstart="set(global_heading, 180);add_compass_spots();" havevrimage="true" thumburl="panos/210.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="-2.403" vlookat="25.369" fovtype="MFOV" fov="119.932" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/210.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512" if="!webvr.isenabled">
+			<level tiledimagewidth="1600" tiledimageheight="1600">
+				<cube url="panos/210.tiles/%s/l2/%v/l2_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="768" tiledimageheight="768">
+				<cube url="panos/210.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<image if="webvr.isenabled">
+			<cube url="panos/210.tiles/vr/pano_%s.jpg" />
+		</image>
+
+		<!-- place your scene hotspots here -->
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="-88.634" atv="14.146" onloaded="add_all_the_time_tooltip()" linkedscene="scene_4818007176356765303" text="大明宫" />
+		<hotspot name="spot2" style="skin_hotspotstyle" ath="25.961" atv="20.679" onloaded="add_all_the_time_tooltip()" linkedscene="scene_4818007176356765305" text="华清池"/>
+		<hotspot name="spot3" style="skin_hotspotstyle" ath="91.782" atv="13.715" onloaded="add_all_the_time_tooltip()" linkedscene="scene_4818007176356765312" text="未央宫"/>
+
+	</scene>
+
+	<scene name="scene_4818007176356765303" title="4818007176356765303" onstart="set(global_heading, 180);add_compass_spots();" havevrimage="true" thumburl="panos/4818007176356765303.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4818007176356765303.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512" if="!webvr.isenabled">
+			<level tiledimagewidth="512" tiledimageheight="512">
+				<cube url="panos/4818007176356765303.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<image if="webvr.isenabled">
+			<cube url="panos/4818007176356765303.tiles/vr/pano_%s.jpg" />
+		</image>
+
+		<!-- place your scene hotspots here -->
+
+	</scene>
+
+	<scene name="scene_4818007176356765305" title="4818007176356765305" onstart="set(global_heading, 180);add_compass_spots();startup();set(control.mousetype, drag2D);" havevrimage="true" thumburl="panos/4818007176356765305.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4818007176356765305.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512" if="!webvr.isenabled">
+			<level tiledimagewidth="512" tiledimageheight="512">
+				<cube url="panos/4818007176356765305.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<image if="webvr.isenabled">
+			<cube url="panos/4818007176356765305.tiles/vr/pano_%s.jpg" />
+		</image>
+
+		<!-- place your scene hotspots here -->
+
+	</scene>
+
+	<scene name="scene_4818007176356765312" title="4818007176356765312" onstart="set(global_heading, 180);add_compass_spots();" havevrimage="true" thumburl="panos/4818007176356765312.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<view hlookat="0" vlookat="0" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/4818007176356765312.tiles/preview.jpg" />
+
+		<image type="CUBE" multires="true" tilesize="512" if="!webvr.isenabled">
+			<level tiledimagewidth="512" tiledimageheight="512">
+				<cube url="panos/4818007176356765312.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<image if="webvr.isenabled">
+			<cube url="panos/4818007176356765312.tiles/vr/pano_%s.jpg" />
+		</image>
+
+		<!-- place your scene hotspots here -->
+
+	</scene>
+
+
+    <events name="nadirlogorotation"
+            keep="true"
+            onviewchange="if(hotspot[nadirlogo].rotatewithview, set(hotspot[nadirlogo].rotate,get(view.hlookat)) );"
+    />
+    <hotspot name="nadirlogo"
+             url="krpano-roundlogo.png"
+             keep="true"
+             ath="0"
+             atv="90"
+             distorted="true"
+             scale="1.0"
+             rotate="0.0"
+             rotatewithview="false"
+             onclick="switch(rotatewithview); invalidatescreen();"
+    />
+
+	Visualize the loading progress.
+	This example shows three possibility to visualize the pano image loading progress - as image-based loop animation (an image-strip with a crop animation), as loading bar (by changing the size of a layer element) and as percent text.
+	It would be possible just to include one of the example xml files to add that kind of loading progress animation to an own pano or tour.
+
+    <!-- 表盘不动 表针动 -->
+    <layer name="compass1" url="compass/compass_bg.png" keep="true" align="lefttop" x="10" y="10" children="false" scalechildren="true" destscale="1.0" onclick="switch(destscale,1.0,0.5);tween(scale,get(destscale));">
+        <layer name="compass1_plate"   url="compass/compass_plate.png" keep="true"    align="center"  zorder="1" />
+        <layer name="compass1_pointer" url="compass/compass_pointer.png" keep="true"  align="center"  zorder="2" />
+        <layer name="compass1_ring"    url="compass/compass_ring.png"  keep="true"   align="lefttop" zorder="3" />
+    </layer>
+
+    <!-- 拖拽图层 -->
+    <layer name="box1" type="container" align="lefttop" x="10" y="10" width="250" height="250" bgcolor="0x000000" bgalpha="0.5" bgcapture="true" maskchildren="true" ondown="draglayer();">
+        <layer name="box2" type="container" align="center" x="0" y="0" width="100" height="100" bgcolor="0x44AADD" bgalpha="1.0" bgcapture="true" ondown="draglayer();" />
+    </layer>
+
+
+    <action name="draglayer">
+        copy(drag_currentx, x);
+        copy(drag_currenty, y);
+        copy(drag_stagex, mouse.stagex);
+        copy(drag_stagey, mouse.stagey);
+        indexoftxt(align_contains_right, get(align), 'right');
+        indexoftxt(align_contains_bottom, get(align), 'bottom');
+        calc(drag_align_x, align_contains_right GE 0 ? -1 : +1);
+        calc(drag_align_y, align_contains_bottom GE 0 ? -1 : +1);
+        asyncloop(pressed,
+        calc(x, drag_currentx + (mouse.stagex - drag_stagex)*drag_align_x);
+        calc(y, drag_currenty + (mouse.stagey - drag_stagey)*drag_align_y);
+        );
+    </action>
+
+    <!-- 视野改变事件 -->
+    <events name="compass_events" keep="true" onviewchange="compass_update_rotate();" />
+
+    <!-- 更新指南针旋转数值 -->
+    <action name="compass_update_rotate">
+        calc(plugin[compass1_pointer].rotate, view.hlookat - global_heading);
+    </action>
+
+ <!-- 动态添加指南热点 -->
+    <action name="add_compass_spots">
+        addspot(n,  calc(0 + global_heading),     0|0| 76|76, 1.0);
+        addspot(no, calc(45 + global_heading),   78|0|118|76, 0.5);
+        addspot(o,  calc(90 + global_heading),  202|0| 71|76, 1.0);
+        addspot(so, calc(135 + global_heading), 281|0|109|76, 0.5);
+        addspot(s,  calc(180 + global_heading), 400|0| 69|76, 1.0);
+        addspot(sw, calc(225 + global_heading), 469|0|134|76, 0.5);
+        addspot(w,  calc(270 + global_heading), 603|0| 86|76, 1.0);
+        addspot(nw, calc(315 + global_heading), 689|0|141|76, 0.5);
+    </action>
+
+    <action name="addspot">
+        addhotspot(%1);
+        set(hotspot[%1].url, '%CURRENTXML%/hotspots.png');
+        set(hotspot[%1].crop, '%3');
+        set(hotspot[%1].ath, %2);
+        set(hotspot[%1].atv, 0);
+        set(hotspot[%1].scale, %4);
+        set(hotspot[%1].scale1, %4);
+        calc(hotspot[%1].scale2, %4 * 2);
+        set(hotspot[%1].zoom,true);
+        set(hotspot[%1].onover, tween(scale,get(scale2)); );
+        set(hotspot[%1].onout, tween(scale,get(scale1)); );
+        set(hotspot[%1].onclick, lookto(get(ath),get(atv),90); );
+    </action>
+
+
+    <layer name="startpic_container"
+           preload="true"
+           alpha="1"
+           handcursor="true"
+           enabled="true"
+           children="true"
+           visible="true"
+           zorder="90"
+           type="container"
+           maskchildren="true"
+           keep="true"
+           width="100%"
+           height="100%"
+           bgcolor="0xFFFFFF"
+           bgalpha="1" >
+
+        <layer name="skin_title_logo3"
+               zorder="100"
+               keep="true"
+               x="0"
+               y="-80"
+               align="center"
+               url="360logo.jpg"
+               scale="1"
+               alpha="0"
+               onloaded="tween(alpha,1.0);tween(layer[skin_title_pr].alpha,1.0);"
+               onclick="tween(layer[startpic_container].ox,-2500,1);
+delayedcall(2,set(layer[startpic_container].enabled,false);
+set(layer[startpic_container].visible,false);
+stopdelayedcall(startpic1);stopdelayedcall(startpic2);"
+               enabled="false" />
+
+        <layer name="skin_title_pr"
+               background="true"
+               backgroundcolor="0x999999"
+               roundedge="10"
+               backgroundalpha="0"
+               border="true"
+               bordercolor="0x999999"
+               borderalpha="0"
+               borderwidth="4.0"
+               glow="0"
+               glowcolor="0xCCCCCC"
+               visible="true"
+               keep="true"
+               alpha="0"
+               onloaded=""
+               children="false"
+               align="center"
+               zorder="100"
+               autowidth="auto"
+               height="40"
+               url="%SWFPATH%/plugins/textfield.swf"
+               html="全景漫游"
+               css="text-align:center; color:#9B8179; font-family:SimHei; font-weight:bold; font-size:32px;"
+               x="0"
+               y="150"
+               onclick="tween(layer[startpic_container].ox,-2500,1);
+delayedcall(2,set(layer[startpic_container].enabled,false);
+set(layer[startpic_container].visible,false);
+stopdelayedcall(startpic1);stopdelayedcall(startpic2);"
+               enabled="false"
+
+        />
+
+    </layer>
+
+    <events name="startlogoevents" keep="true"
+            onloadcomplete="
+ifnot(layer[skin_title_logo3].enabled,
+set(layer[skin_title_logo3].enabled,true);
+set(layer[skin_title_pr].enabled,true);
+delayedcall(startpic1,4,tween(layer[startpic_container].ox,-2500,1));
+delayedcall(startpic2,5,set(layer[startpic_container].enabled,false);set(layer[startpic_container].visible,false));)
+"/>
+
+    <events name="startlogoevents" keep="true"
+            onloadcomplete="
+ifnot(layer[skin_title_logo3].enabled,
+set(layer[skin_title_logo3].enabled,true);
+set(layer[skin_title_pr].enabled,true);
+delayedcall(startpic1,4,tween(layer[startpic_container].ox,-2500,1));
+delayedcall(startpic2,5,set(layer[startpic_container].enabled,false);set(layer[startpic_container].visible,false));)
+"/>
+
+    <!-- 启动画面结束 -->
+
+	<!-- 文本域，整个文本域的父元素textfield，包括了针对该文本域的位置和尺寸，通过align、x、y以及width、height进行修改。scale9grid属性能够使得图片边缘区域不被缩放，这样看起来背景会更加锐利。当然你可以不用这种带图片的做父元素，可以直接使用container，这样加载速度会大大加快。 -->
+
+	<layer name="textfield" keep="true" url="textfield.png" align="center" x="-200" y="120" width="30%" height="200" scale9grid="6|6|268|188">
+
+		<!-- 滚动文字部分，基本的三大部分，一个是scrollarea插件必须要有的父元素，也就是textmask，它是一个容器container，width和height采用了负值，则是以父元素的尺寸加上该负值后的最终结果，也就是父元素的宽度减去30像素作为textmask的宽度，父元素高度减去10像素作为textmask的高度，同时maskchildren="true"也保证了文字滚动时不会超出遮罩区域。 -->
+
+		<layer name="textmask" type="container" align="lefttop" x="5" y="5" width="-30" height="-10" maskchildren="true">
+
+			<!-- scrollarea插件。因为是垂直方向，所以direction="v"，onscroll事件下的动作确保滚动区域的正确位置。 -->
+
+			<layer name="textscroller" url="%SWFPATH%/plugins/scrollarea.swf" alturl="%SWFPATH%/plugins/scrollarea.js" mwheel="true" direction="v" overscroll="0" align="lefttop" width="100%" height="100%" onscroll="if(hoverflow GT 0, div(yp,toverflow,hoverflow);Math.min(yp,1);Math.max(yp,0); copy(th,layer[scrollbar].pixelheight);sub(th,layer[scrollup].pixelheight);sub(th,layer[scrolldown].pixelheight);sub(th,layer[scrollslider].pixelheight); mul(yp,th);add(yp,layer[scrollup].pixelheight); copy(layer[scrollslider].y,yp); );">
+
+				<!-- textfield插件。文本部分，文本内容有HTML属性决定。css属性确定字体样式。通过autoheight属性自动确定文本所占据的高度，同时将这个高度将调整尺寸时赋予textscroller。 -->
+
+				<layer name="text" url="%SWFPATH%/plugins/textfield.swf" align="lefttop" x="0" y="0" width="100%" autoheight="true" background="false" border="false" onautosized="copy(layer[textscroller].height, height);"
+
+					   padding="10 15"
+
+					   html="data:testtext"
+
+					   css="color:#000000; font-family:Arial; font-size:12px;"
+
+				/>
+
+			</layer>
+
+		</layer>
+
+		<!-- 滚动条部分，包括了向上scrollup向下scrolldown以及滚动条scrollslider本身。 -->
+
+		<layer name="scrollbar" type="container" bgcolor="0x000000" bgalpha="0.25" align="righttop" x="5" y="5" width="19" height="-10">
+
+			<layer name="scrollup" url="dirbutton.png" align="righttop" x="19" rotate="-90" crop="0|0|19|19" onovercrop="0|19|19|19" ondowncrop="0|38|19|19" ondown="asyncloop(pressed, layer[textscroller].scrollby(0,+1));" />
+
+			<layer name="scrolldown" url="dirbutton.png" align="rightbottom" x="19" rotate="+90" crop="0|0|19|19" onovercrop="0|19|19|19" ondowncrop="0|38|19|19" ondown="asyncloop(pressed, layer[textscroller].scrollby(0,-1));" />
+
+			<layer name="scrollslider" url="sliderbutton.png" align="righttop" x="0" y="19" crop="0|0|19|19" onovercrop="0|19|19|19" ondowncrop="0|38|19|19" ondown="if(layer[textscroller].hoverflow GT 0, copy(cy,y);copy(sy,mouse.stagey);dragging(); );" dragging="if(pressed, sub(dy,mouse.stagey,sy);add(ny,cy,dy);Math.max(ny,layer[scrollup].pixelheight); copy(th,layer[scrollbar].pixelheight);sub(th,layer[scrolldown].pixelheight);sub(th,layer[scrollslider].pixelheight);Math.min(ny,th); copy(y,ny); sub(ny,layer[scrollup].pixelheight);sub(th,layer[scrollslider].pixelheight);div(ny,th); copy(fh,layer[textscroller].hoverflow); mul(fh,-1); mul(ny,fh); layer[textscroller].stopscrolling(); copy(layer[textscroller].y,ny); delayedcall(0,dragging()); );" />
+
+		</layer>
+
+	</layer>
+
+	<!-- 文本内容，对应text中的html属性 -->
+
+	<data name="testtext">
+
+		这都尼玛什么玩意儿？
+
+	</data>
+</krpano>
